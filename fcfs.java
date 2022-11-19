@@ -62,6 +62,11 @@ public class fcfs{
 		sc.close();
 		System.out.println("Average Waiting time is"+(avgwt/n));
 		System.out.println("Average Turnaround time is"+(avgta/n));
+		System.out.println("Gantt chart: ");
+                System.out.println("\nProcess ID: ");
+                 for(int i=0;i<n;i++){
+                     System.out.print(p[i]+"   ");
+                 }
 	}
 }
 
