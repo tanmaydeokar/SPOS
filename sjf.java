@@ -1,100 +1,85 @@
-import java.util.Scanner;
- class sjf{
-    public static void main(String args[])
-    {
-    int burst_time[],process[],waiting_time[],tat[],arr_time[],completion_time[],i,j,n,total=0,total_comp=0,pos,temp;
-    float wait_avg,TAT_avg;
-    Scanner s = new Scanner(System.in);
-     System.out.print("Enter number of process: ");
-    n = s.nextInt();
-     process = new int[n];
-    burst_time = new int[n];
-    waiting_time = new int[n];
-    arr_time=new int[n];
-    tat = new int[n];
-    completion_time=new int[n];
-     
-    //burst time
-    System.out.println("\nEnter Burst time:");
-    for(i=0;i<n;i++)
-    {
-    System.out.print("\nProcess["+(i+1)+"]: ");
-    burst_time[i] = s.nextInt();;
-    process[i]=i+1; //Process Number
-    }
-    
-    //arrival time
-    System.out.println("\nEnter arrival time:");
-    for(i=0;i<n;i++)
-    {
-    System.out.print("\nProcess["+(i+1)+"]: ");
-    arr_time[i] = s.nextInt();;
-    process[i]=i+1; //Process Number
-    }
-     
-    //Sorting
-    for(i=0;i<n;i++)
-    {
-    pos=i;
-    for(j=i+1;j<n;j++)
-    {
-    if(burst_time[j]<burst_time[pos])
-    pos=j;
-    }
-     
-    temp=burst_time[i];
-    burst_time[i]=burst_time[pos];
-    burst_time[pos]=temp;
-     
-    temp=process[i];
-    process[i]=process[pos];
-    process[pos]=temp;
-    
-    System.out.println("process"+process[i]);
-    }
-    //completion 
-    //time new 
-    for(i=1;i<n;i++)
-    {
-    completion_time[i]=0;
-    for(j=0;j<i;j++)
-    completion_time[i]+=burst_time[j];
-     total_comp+=completion_time[i];
-    }
-     
-    //First process has 0 waiting 
-    //time
-    waiting_time[0]=0;
-    //calculate 
-    //waiting time
-    for(i=1;i<n;i++)
-    {
-    waiting_time[i]=0;
-    for(j=0;j<i;j++)
-    waiting_time[i]+=burst_time[j];
-    total+=waiting_time[i];
-    }
-     
-     
-    //Calculating Average waiting time
-    wait_avg=(float)total/n;
-    total=0;
-     
-    System.out.println("\nPro_number\t Burst Time \tcompletion_time\tWaiting Time\tTurnaround Time");
-    for(i=0;i<n;i++)
-    {
-    tat[i]=burst_time[i]+waiting_time[i];
-     //Calculating Turnaround Time
-    total+=tat[i];
-    System.out.println("\n"+process[i]+"\t\t "+burst_time[i]+"\t\t "+completion_time[i]+"\t\t"+waiting_time[i]+"\t\t "+tat[i]);
-    }
-     
-    //Calculation of Average Turnaround Time
-    TAT_avg=(float)total/n;
-    System.out.println("\n\nAWT: "+wait_avg);
-    System.out.println("\nATAT: "+TAT_avg);
-     
-    }
-    }
-    
+   import java.util.Scanner;
+
+   public class sjf {
+
+      public static void main(String[] args){
+         Scanner sc = new Scanner(System.in);
+         System.out.println("enter no of process: ");
+         int n = sc.nextInt();
+         int pid[] = new int[n];    // process ids
+         int ar[] = new int[n];     // arrival times
+         int bt[] = new int[n];     // burst or execution times
+         int ct[] = new int[n];     // completion times
+         int ta[] = new int[n];     // turn around times
+         int wt[] = new int[n];     // waiting times
+         int f[] = new int[n]; 
+         int k[] = new int[n];
+         int ganntProcess[] = new int[50];
+         int process = 0;
+         int  tot=0,st=0;
+         float avgwt=0,avgta=0;
+
+         for(int i = 0; i < n; i++)
+         {
+               System.out.println("enter process " + (i+1) + " arrival time: ");
+               ar[i] = sc.nextInt();
+               System.out.println("enter process " + (i+1) + " brust time: ");
+               bt[i] = sc.nextInt();
+               k[i] = bt[i];
+               pid[i] = i+1;
+         }
+
+         while(true){
+               int min = 99 , c = n;
+               if(tot == n)
+                  break;
+
+               for(int i=0;i<n;i++){
+                  if(ar[i]<=st && f[i] == 0 && bt[i]<min ){
+                     min = bt[i];
+                     c = i;
+                  }
+               }
+
+               if (c == n) st++;
+               else{
+                  bt[c]--;
+                  st++;
+                  if(bt[c] == 0){
+                     ct[c] =st;
+                     f[c]=1;
+                     tot++;
+                     }
+               }
+
+               ganntProcess[process] = c+1;
+               process++;
+
+
+         }
+
+         for(int i=0;i<n;i++){
+               ta[i] = ct[i] - ar[i];
+               wt[i] = ta[i] - k[i];
+               avgwt += wt[i];
+               avgta += ta[i];
+         }
+
+         for(int i=0;i<process;i++){
+               System.out.print("P"+ ganntProcess[i] + " ");
+         }
+         System.out.println();
+
+
+         System.out.println("pid  arrival  burst  complete turn waiting");
+         for(int i=0;i<n;i++) {
+               System.out.println(pid[i] +"\t"+ ar[i]+"\t"+ k[i] +"\t"+ ct[i] +"\t"+ ta[i] +"\t"+ wt[i]);
+         }
+
+         System.out.println("\naverage tat is "+ (float)(avgta/n));
+         System.out.println("average wt is "+ (float)(avgwt/n));
+         sc.close();
+      }
+
+   }
     
