@@ -45,7 +45,7 @@ public class Round {
                 run[i]=run[i]-run[i];
                 ta[i]=time;
                 rp--;
-0
+
                 System.out.println("Process: "+i+"time: "+time);
                 ganntProcess[process] = i+1;
                 process++;
