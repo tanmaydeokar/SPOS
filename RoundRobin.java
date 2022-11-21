@@ -1,63 +1,78 @@
-import java.util.Scanner;  
-public class RoundRobin  
-{  
-public static void main(String args[])  
-{  
-int n,i,qt,count=0,temp,sq=0,bt[],wt[],tat[],rem_bt[];  
-float awt=0,atat=0;  
-bt = new int[10];  
-wt = new int[10];  
-tat = new int[10];  
-rem_bt = new int[10];  
-Scanner s=new Scanner(System.in);  
-System.out.print("Enter the number of process (maximum 10) = ");  
-n = s.nextInt();  
-System.out.print("Enter the burst time of the process\n");  
-for (i=0;i<n;i++)  
-{  
-System.out.print("P"+i+" = ");   
-bt[i] = s.nextInt();  
-rem_bt[i] = bt[i];  
-}  
-System.out.print("Enter the quantum time: ");  
-qt = s.nextInt();  
-while(true)  
-{  
-for (i=0,count=0;i<n;i++)  
-{  
-temp = qt;  
-if(rem_bt[i] == 0)  
-{  
-count++;  
-continue;  
-}  
-if(rem_bt[i]>qt)  
-rem_bt[i]= rem_bt[i] - qt;  
-else  
-if(rem_bt[i]>=0)  
-{  
-temp = rem_bt[i];  
-rem_bt[i] = 0;  
-}  
-sq = sq + temp;  
-tat[i] = sq;  
-}  
-if(n == count)  
-break;  
-}  
-System.out.print("--------------------------------------------------------------------------------");  
-System.out.print("\nProcess\t      Burst Time\t       Turnaround Time\t          Waiting Time\n");  
-System.out.print("--------------------------------------------------------------------------------");  
-for(i=0;i<n;i++)  
-{  
-wt[i]=tat[i]-bt[i];  
-awt=awt+wt[i];  
-atat=atat+tat[i];  
-System.out.print("\n "+(i+1)+"\t "+bt[i]+"\t\t "+tat[i]+"\t\t "+wt[i]+"\n");  
-}  
-awt=awt/n;  
-atat=atat/n;  
-System.out.println("\nAverage waiting Time = "+awt+"\n");  
-System.out.println("Average turnaround time = "+atat);  
-}  
-}  
+import java.util.Scanner;
+
+public class Round {
+
+    int burst[],run[],n,quantom=0,wait[],time=0,rp=0,ta[];
+
+    public Round(){
+        Scanner sc=new Scanner(System.in);
+        Scanner sc1=new Scanner(System.in);
+        System.out.println("Enter the number of process: ");
+        n=sc.nextInt();
+        rp=n;
+        burst=new int[n];
+        run=new int[n];
+        wait=new int[n];
+        ta=new int[n];
+        System.out.println("Enter their burst times: ");
+        for(int i=0;i<n;i++){
+            burst[i]=sc1.nextInt();
+            run[i]=burst[i];
+            wait[i]=0;
+        }
+        System.out.println("Enter Quantom: ");
+        quantom=sc.nextInt();
+        logic();
+    }
+    public void logic(){
+        int ganntProcess[] = new int[50];
+        int process = 0;
+        int i=0;
+        while(rp!=0){
+            if(run[i]>quantom){
+                run[i]=run[i]-quantom;
+                time=time+quantom;
+				/*if(run[i]==0){
+					ta[i]=time;
+					rp--;
+				}*/
+                System.out.println("Process: "+i+"time: "+time);
+                ganntProcess[process] = i+1;
+                process++;
+            }
+            else if(run[i]<=quantom && run[i]>0){
+                time=time+run[i];
+                run[i]=run[i]-run[i];
+                ta[i]=time;
+                rp--;
+0
+                System.out.println("Process: "+i+"time: "+time);
+                ganntProcess[process] = i+1;
+                process++;
+            }
+            i++;
+            if(i==n){
+                i=0;
+            }
+        }
+        for(int j=0;j<n;j++){
+            wait[j]=ta[j]-burst[j];
+            System.out.println(ta[j]+" "+wait[j]);
+           // System.out.println(" ");
+           // System.out.println(wait[j]);
+        }
+        for(int x=0;x<process;x++){
+            System.out.print("P"+ ganntProcess[x] + " ");
+        }
+        System.out.println();
+
+    }
+    public static void main(String[] args) {
+        new Round();
+    }
+}
+
+
+
+
+
